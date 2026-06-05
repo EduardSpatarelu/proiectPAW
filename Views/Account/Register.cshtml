@@ -1,0 +1,67 @@
+﻿@model BARmonica.Web.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Creează Cont";
+}
+
+<div class="container mt-5" style="max-width: 650px;">
+    <div class="card shadow-sm p-4" style="border-radius: 12px; border: none; background-color: #fcfcfc;">
+        <h2 class="text-center mb-2" style="color: #d4af37; font-weight: bold;">Bun venit la BARmonica</h2>
+        <p class="text-center text-muted mb-4">Magazin exclusiv persoanelor peste 18 ani.</p>
+
+        <form asp-action="Register" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="LastName" class="form-label fw-bold text-secondary"></label>
+                    <input asp-for="LastName" class="form-control" placeholder="Ex: Popescu" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mt-3 mt-md-0">
+                    <label asp-for="FirstName" class="form-label fw-bold text-secondary"></label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Ex: Ion" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="form-label fw-bold text-secondary"></label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="07xx xxx xxx" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mt-3 mt-md-0">
+                    <label asp-for="DateOfBirth" class="form-label fw-bold text-secondary"></label>
+                    <input asp-for="DateOfBirth" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-bold text-secondary"></label>
+                <input asp-for="Email" class="form-control" placeholder="nume@exemplu.ro" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Password" class="form-label fw-bold text-secondary">Parolă</label>
+                    <input asp-for="Password" class="form-control" placeholder="Minim 6 caractere, o cifră" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mt-3 mt-md-0">
+                    <label asp-for="ConfirmPassword" class="form-label fw-bold text-secondary">Confirmă Parola</label>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Repetă parola" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="ProfilePicture" class="form-label fw-bold text-secondary">Poză de Profil (Opțional)</label>
+                <input asp-for="ProfilePicture" type="file" class="form-control" accept="image/*" />
+            </div>
+
+            <button type="submit" class="btn w-100 fw-bold shadow-sm" style="background-color: #d4af37; color: white; border: none; padding: 12px; font-size: 1.1rem;">Creează Contul</button>
+        </form>
+    </div>
+</div>

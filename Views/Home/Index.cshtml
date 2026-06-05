@@ -1,0 +1,44 @@
+﻿@model IEnumerable<BARmonica.Web.Models.Product>
+@{
+    ViewData["Title"] = "Acasă";
+}
+
+<div class="hero-banner mt-2">
+    <h1 class="hero-title">Gustul Autentic în Paharul Tău</h1>
+    <p class="hero-subtitle">Descoperă selecția noastră premium de vinuri de colecție și băuturi fine.</p>
+    <a href="#vitrina-produse" class="btn btn-premium btn-lg mt-3">Descoperă Ofertele</a>
+</div>
+
+<div class="container mb-4">
+    <h5 class="mb-3" style="font-weight: 600;">Filtrează după categorie</h5>
+    <div class="category-slider-container overflow-auto" style="white-space: nowrap; padding-bottom: 10px;">
+        <a asp-action="Index" asp-route-category="" class="category-badge-item">🌟 Toate</a>
+        <a asp-action="Index" asp-route-category="Vinuri" class="category-badge-item">🍷 Vinuri</a>
+        <a asp-action="Index" asp-route-category="Traditionale" class="category-badge-item">🏺 Tradiționale</a>
+        <a asp-action="Index" asp-route-category="Whisky" class="category-badge-item">🥃 Whisky</a>
+    </div>
+</div>
+
+<div class="container mb-5" id="vitrina-produse">
+    <div class="product-grid">
+        @foreach (var item in Model)
+        {
+            <div class="product-card">
+                <div class="product-image-container"><span style="font-size: 4rem;">🍾</span></div>
+                <div class="product-info">
+                    <div class="product-category">@item.Category?.Name</div>
+                    <div class="product-title">@item.Name</div>
+                    <div class="product-description">@(item.Description?.Length > 60 ? item.Description.Substring(0, 60) + "..." : item.Description)</div>
+                    <div class="product-meta">
+                        <div class="product-price">@item.Price.ToString("0.00") Lei</div>
+                        <div class="product-stock text-success">Disponibil</div>
+                    </div>
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-premium w-100 mt-3">Adaugă în coș</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+<div class="container mt-5" style="max-width: 600px;">
+    <h1 class="text-center mb-4" style="color: #2c3e50; font-weight: bold;">Contactează-ne</h1>
+    <div class="card shadow-sm p-4" style="border-radius: 12px; border: none;">
+        <form>
+            <div class="mb-3">
+                <label class="form-label text-muted">Numele tău</label>
+                <input type="text" class="form-control" placeholder="Ex: Ion Popescu" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-muted">Adresa de Email</label>
+                <input type="email" class="form-control" placeholder="nume@exemplu.ro" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-muted">Mesajul tău</label>
+                <textarea class="form-control" rows="4" placeholder="Cu ce te putem ajuta?"></textarea>
+            </div>
+            <button type="button" class="btn btn-adauga w-100">Trimite Mesajul</button>
+        </form>
+    </div>
+</div>

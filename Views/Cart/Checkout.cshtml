@@ -1,0 +1,21 @@
+﻿<div class="container mt-5" style="max-width: 600px;">
+    <div class="card p-4 shadow-sm">
+        <h2>Finalizare Comandă</h2>
+        <form asp-action="PlaceOrder" method="post" class="mt-4">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Adresă de Livrare</label>
+                <input type="text" class="form-control" placeholder="Strada, Număr, Oraș" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Metoda de Plată</label>
+                <select class="form-select" name="paymentMethod" required>
+                    <option value="" disabled selected>Alege o metodă...</option>
+                    <option value="Cash">Plată Ramburs (Cash la livrare)</option>
+                    <option value="Card">Plată cu Cardul (Online)</option>
+                    <option value="Transfer">Transfer Bancar</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-premium w-100 mt-3">Plasează Comanda</button>
+        </form>
+    </div>
+</div>

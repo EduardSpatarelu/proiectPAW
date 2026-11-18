@@ -4,85 +4,96 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BARmonica</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" style="background-color: var(--barmonica-dark);">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BARmonica</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+        <!DOCTYPE html>
+        <html lang="ro">
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>@ViewData["Title"] - BARmonica</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        </head>
+        <body>
+            <header>
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" style="background-color: var(--barmonica-dark);">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BARmonica</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1 align-items-center text-nowrap">
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Wishlist" asp-action="Index">Favorite</a></li>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item"><a class="nav-link" asp-controller="Cart" asp-action="OrderHistory">Istoric Comenzi</a></li>
+                            }
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">Despre Noi</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Contact</a></li>
 
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">Despre Noi</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item"><a class="nav-link nav-admin-link" asp-controller="Categories" asp-action="Index">Categorii</a></li>
-                            <li class="nav-item"><a class="nav-link nav-admin-link" asp-controller="Producers" asp-action="Index">Producători</a></li>
-                            <li class="nav-item"><a class="nav-link nav-admin-link" asp-controller="Products" asp-action="Index">Produse</a></li>
-                        }
-                    </ul>
-                    <ul class="navbar-nav align-items-center">
-                        <li class="nav-item me-4 position-relative">
-                            <a class="nav-link" asp-controller="Cart" asp-action="Index" style="color: var(--barmonica-gold) !important;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
-                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                </svg>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.70rem; transform: translate(-30%, 10%) !important;">
-                                    @(Context.Session.GetObjectFromJson<List<CartItem>>("Cart")?.Sum(x => x.Quantity) ?? 0)
-                                </span>
-                            </a>
-                        </li>
-                        @if (SignInManager.IsSignedIn(User))
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item"><a class="nav-link nav-admin-link" asp-controller="Categories" asp-action="Index">Categorii</a></li>
+                                <li class="nav-item"><a class="nav-link nav-admin-link" asp-controller="Producers" asp-action="Index">Producători</a></li>
+                                <li class="nav-item"><a class="nav-link nav-admin-link" asp-controller="Products" asp-action="Index">Produse</a></li>
+                            }
+                            </ul>
+                            <ul class="navbar-nav align-items-center text-nowrap">
+                                <li class="nav-item me-3 position-relative">
+                                    <a class="nav-link" asp-controller="Wishlist" asp-action="Index" style="color: var(--barmonica-gold) !important;" title="Lista de Favorite">
+                                        ❤️
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.70rem; transform: translate(-30%, 10%) !important;">
+                                            @(Context.Session.GetObjectFromJson<List<int>>("Wishlist")?.Count ?? 0)
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item me-4 position-relative">
+                                    <a class="nav-link" asp-controller="Cart" asp-action="Index" style="color: var(--barmonica-gold) !important;" title="Coș de cumpărături">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                        </svg>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.70rem; transform: translate(-30%, 10%) !important;">
+                                            @(Context.Session.GetObjectFromJson<List<CartItem>>("Cart")?.Sum(x => x.Quantity) ?? 0)
+                                        </span>
+                                    </a>
+                                </li>
+                                @if (SignInManager.IsSignedIn(User))
                         {
                             var user = await UserManager.GetUserAsync(User);
-                            <li class="nav-item d-flex align-items-center">
-                                @if (!string.IsNullOrEmpty(user?.ProfilePicturePath))
+                                <li class="nav-item d-flex align-items-center">
+                                    @if (!string.IsNullOrEmpty(user?.ProfilePicturePath))
                                 {
                                     <img src="@user.ProfilePicturePath" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 2px solid var(--barmonica-gold);" />
                                 }
-                                <span class="nav-link text-light" style="font-weight: 600; margin-right: 15px;">Salut, @User.Identity?.Name!</span>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post"><button type="submit" class="btn btn-outline-danger btn-sm mt-1">Logout</button></form>
-                            </li>
+                                <span class="nav-link text-light" style="font-weight: 600; margin-right: 10px;">Salut, @(string.IsNullOrWhiteSpace(user?.FirstName) ? User.Identity?.Name : user.FirstName)!</span>
+                                </li>
+                                <li class="nav-item">
+                                    <form asp-controller="Account" asp-action="Logout" method="post"><button type="submit" class="btn btn-outline-danger btn-sm mt-1">Logout</button></form>
+                                </li>
                         }
                         else
                         {
-                            <li class="nav-item"><a class="nav-link text-light fw-bold" asp-controller="Account" asp-action="Login">Autentificare</a></li>
-                            <li class="nav-item"><a class="nav-link fw-bold" style="color: var(--barmonica-gold) !important;" asp-controller="Account" asp-action="Register">Creează Cont</a></li>
+                                <li class="nav-item"><a class="nav-link text-light fw-bold" asp-controller="Account" asp-action="Login">Autentificare</a></li>
+                                <li class="nav-item"><a class="nav-link fw-bold" style="color: var(--barmonica-gold) !important;" asp-controller="Account" asp-action="Register">Creează Cont</a></li>
                         }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container"><main role="main" class="pb-3">@RenderBody()</main></div>
-    <footer class="border-top footer text-muted mt-5 text-center p-3">
-        &copy; @DateTime.Now.Year - BARmonica.Web -
-        <a asp-controller="Home" asp-action="Privacy">Confidențialitate</a> |
-        <a asp-controller="Home" asp-action="About">Despre Noi</a> |
-        <a asp-controller="Home" asp-action="Contact">Contact</a>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <div class="container"><main role="main" class="pb-3">@RenderBody()</main></div>
+            <footer class="border-top footer text-white-50 mt-5 text-center p-3">
+                &copy; @DateTime.Now.Year - BARmonica.Web -
+                <a asp-controller="Home" asp-action="Privacy">Confidențialitate</a> |
+                <a asp-controller="Home" asp-action="About">Despre Noi</a> |
+                <a asp-controller="Home" asp-action="Contact">Contact</a>
+            </footer>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            @await RenderSectionAsync("Scripts", required: false)
+        </body>
+    </html>

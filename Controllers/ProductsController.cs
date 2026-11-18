@@ -33,6 +33,7 @@ namespace BARmonica.Web.Controllers
         }
 
         // GET: Products/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -46,7 +47,6 @@ namespace BARmonica.Web.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            // Pregatim listele de selectie pentru Categorie si Producator
             var categories = await _categoryService.GetAllCategoriesAsync();
             var producers = await _producerService.GetAllProducersAsync();
 
@@ -59,7 +59,7 @@ namespace BARmonica.Web.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,StockQuantity,ImageUrl,CategoryId,ProducerId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Specifications,Price,StockQuantity,DeliveryMethod,ImageUrl,CategoryId,ProducerId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,6 @@ namespace BARmonica.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Daca avem erori, reincarcam listele pentru dropdown
             var categories = await _categoryService.GetAllCategoriesAsync();
             var producers = await _producerService.GetAllProducersAsync();
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", product.CategoryId);
@@ -95,7 +94,7 @@ namespace BARmonica.Web.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,StockQuantity,ImageUrl,CategoryId,ProducerId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Specifications,Price,StockQuantity,DeliveryMethod,ImageUrl,CategoryId,ProducerId")] Product product)
         {
             if (id != product.Id) return NotFound();
 

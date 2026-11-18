@@ -217,6 +217,11 @@ namespace BARmonica.Web.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DeliveryMethod")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
@@ -234,6 +239,11 @@ namespace BARmonica.Web.Migrations
 
                     b.Property<int>("ProducerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Specifications")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");

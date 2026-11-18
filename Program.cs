@@ -60,7 +60,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-// --- SCRIPT PENTRU CREAREA ROLURILOR (ADMIN SI CLIENT) ---
+// --- SCRIPT PENTRU CREAREA ROLURILOR SI CONTULUI DE ADMIN ---
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole>>();
@@ -73,9 +73,29 @@ using (var scope = app.Services.CreateScope())
     if (!await roleManager.RoleExistsAsync("Client"))
         await roleManager.CreateAsync(new Microsoft.AspNetCore.Identity.IdentityRole("Client"));
 
-    // 2. Îi dăm contului tău rolul de Admin (modifică email-ul dacă ai folosit altul)
-    var adminUser = await userManager.FindByEmailAsync("eduard@barmonica.ro");
-    if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
+    // 2. Verificăm / creăm contul de Admin și îi setăm parola "parola123"
+    var adminEmail = "eduard@barmonica.ro";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+    if (adminUser == null)
+    {
+        adminUser = new BARmonica.Web.Models.ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            FirstName = "Eduard",
+            LastName = "Admin",
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(adminUser, "parola123");
+    }
+    else
+    {
+        var resetToken = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+        await userManager.ResetPasswordAsync(adminUser, resetToken, "parola123");
+    }
+
+    if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
     {
         await userManager.AddToRoleAsync(adminUser, "Admin");
     }

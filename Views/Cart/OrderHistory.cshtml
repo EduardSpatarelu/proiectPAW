@@ -1,0 +1,83 @@
+﻿@model IEnumerable<BARmonica.Web.Models.Order>
+
+@{
+    ViewData["Title"] = "Istoric Comenzi";
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="mb-4">📦 Istoricul Comenzilor</h2>
+
+    @if (TempData["OrderMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["OrderMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Nu există nicio comandă plasată momentan.
+            <a asp-controller="Home" asp-action="Index" class="alert-link ms-2">Mergi la catalogul de produse</a>.
+        </div>
+    }
+    else
+    {
+        <table class="table align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nr. Comandă</th>
+                    <th>Data și Ora</th>
+                    <th>Client</th>
+                    <th>Detalii Livrare & Produse</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th>Administrare</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    var badgeClass = order.Status switch
+                    {
+                        "În procesare" => "bg-warning text-dark",
+                        "Expediată" => "bg-info text-dark",
+                        "Livrată" => "bg-success",
+                        "Anulată" => "bg-danger",
+                        _ => "bg-secondary"
+                    };
+
+                    <tr>
+                        <td class="fw-bold">#@order.Id</td>
+                        <td>@order.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@order.CustomerName</td>
+                        <td>@order.ShippingAddress</td>
+                        <td class="fw-bold text-nowrap">@order.TotalAmount.ToString("0.00") Lei</td>
+                        <td>
+                            <span class="badge @badgeClass">@order.Status</span>
+                        </td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <td>
+                                <form asp-controller="Cart" asp-action="UpdateOrderStatus" method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="id" value="@order.Id" />
+                                    <select name="status" class="form-select form-select-sm" style="min-width: 135px;">
+                                        <option value="În procesare" selected="@(order.Status == "În procesare")">În procesare</option>
+                                        <option value="Expediată" selected="@(order.Status == "Expediată")">Expediată</option>
+                                        <option value="Livrată" selected="@(order.Status == "Livrată")">Livrată</option>
+                                        <option value="Anulată" selected="@(order.Status == "Anulată")">Anulată</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-dark">Salvează</button>
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

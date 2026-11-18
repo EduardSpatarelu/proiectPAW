@@ -1,0 +1,74 @@
+﻿@model IEnumerable<BARmonica.Web.Models.Product>
+
+    @{
+    ViewData["Title"] = "Lista de Favorite";
+    }
+
+    <div class="container mt-4 mb-5">
+        <h2 class="mb-4">❤️ Lista ta de favorite (Wishlist)</h2>
+
+        @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Nu ai niciun produs în lista de favorite momentan.
+            <a asp-controller="Home" asp-action="Index" class="alert-link ms-2">Răsfoiește catalogul de băuturi</a>.
+        </div>
+    }
+    else
+    {
+        <table class="table align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Produs</th>
+                    <th>Categorie</th>
+                    <th>Specificații</th>
+                    <th>Preț</th>
+                    <th>Stoc</th>
+                    <th>Acțiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="fw-bold text-decoration-none text-dark">
+                            @item.Name
+                        </a>
+                    </td>
+                    <td>@item.Category?.Name</td>
+                    <td class="small text-muted">@item.Specifications</td>
+                    <td class="fw-bold">@item.Price.ToString("0.00") Lei</td>
+                    <td>
+                        @if (item.StockQuantity > 0)
+                            {
+                        <span class="text-success">În stoc (@item.StockQuantity buc.)</span>
+                            }
+                            else
+                            {
+                        <span class="text-danger">Stoc epuizat</span>
+                            }
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-warning fw-semibold" disabled="@(item.StockQuantity <= 0)">
+                                    Adaugă în coș
+                                </button>
+                            </form>
+
+                            <form asp-controller="Wishlist" asp-action="RemoveFromWishlist" method="post">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Șterge
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+    </div>
